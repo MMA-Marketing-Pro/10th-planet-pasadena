@@ -1,359 +1,250 @@
-/* =========================================================================
-   10th Planet Pasadena — Shared scripts
-   ========================================================================= */
-(function () {
+/* =========================================================
+   10th Planet Pasadena — LAB-01 shared scripts
+   ========================================================= */
+(function(){
   'use strict';
 
-  document.addEventListener('DOMContentLoaded', function () {
-    initLucide();
+  // Tag <html> so CSS can scope the reveal-fade behavior to JS-capable clients.
+  document.documentElement.classList.add('js-reveal');
+
+  document.addEventListener('DOMContentLoaded', function(){
     initNav();
-    initScrollAnimations();
+    initMobileMenu();
+    initReveal();
     initLeadModal();
-    initVideoModal();
+    initBentoTilt();
     initBookingPage();
-    initMarqueeClone();
-    initCopyYear();
-    initStatCounters();
+    initYearStamp();
+    initBarsFill();
   });
 
-  /* ---------- Lucide ---------- */
-  function initLucide() {
-    try {
-      if (window.lucide && typeof window.lucide.createIcons === 'function') {
-        window.lucide.createIcons();
-      }
-    } catch (e) { /* noop */ }
-  }
-
-  /* ---------- Nav scroll + mobile toggle ---------- */
-  function initNav() {
+  /* Navigation: shadow + blur after scroll */
+  function initNav(){
     var nav = document.querySelector('.nav');
     if (!nav) return;
-
-    var toggle = nav.querySelector('.nav-toggle');
-    var handleScroll = function () {
-      if (window.scrollY > 24) nav.classList.add('scrolled');
-      else nav.classList.remove('scrolled');
+    var onScroll = function(){
+      if (window.scrollY > 12){ nav.classList.add('nav--scrolled'); }
+      else { nav.classList.remove('nav--scrolled'); }
     };
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive:true });
+  }
 
-    if (toggle) {
-      toggle.addEventListener('click', function () {
-        nav.classList.toggle('open');
-        var isOpen = nav.classList.contains('open');
-        toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-        document.body.style.overflow = isOpen ? 'hidden' : '';
-        var icon = toggle.querySelector('i[data-lucide]');
-        if (icon) {
-          icon.setAttribute('data-lucide', isOpen ? 'x' : 'menu');
-          initLucide();
+  /* Mobile menu: open/close, lock body scroll, animated hamburger */
+  function initMobileMenu(){
+    var toggle = document.querySelector('.nav-toggle');
+    var menu   = document.getElementById('mobile-menu');
+    if (!toggle || !menu) return;
+
+    var open = false;
+    var setState = function(next){
+      open = next;
+      toggle.setAttribute('aria-expanded', String(open));
+      menu.setAttribute('aria-hidden', String(!open));
+      document.body.classList.toggle('no-scroll', open);
+      var l1 = toggle.querySelector('[data-l1]');
+      var l2 = toggle.querySelector('[data-l2]');
+      if (l1 && l2){
+        if (open){
+          l1.setAttribute('transform', 'translate(0 0) rotate(45 12 12)');
+          l2.setAttribute('transform', 'translate(0 0) rotate(-45 12 12)');
+        } else {
+          l1.removeAttribute('transform');
+          l2.removeAttribute('transform');
         }
-      });
-
-      nav.querySelectorAll('.nav-mobile a').forEach(function (link) {
-        link.addEventListener('click', function () {
-          nav.classList.remove('open');
-          toggle.setAttribute('aria-expanded', 'false');
-          document.body.style.overflow = '';
-          var icon = toggle.querySelector('i[data-lucide]');
-          if (icon) {
-            icon.setAttribute('data-lucide', 'menu');
-            initLucide();
-          }
-        });
-      });
-    }
+      }
+    };
+    toggle.addEventListener('click', function(){ setState(!open); });
+    menu.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ setState(false); });
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && open){ setState(false); }
+    });
   }
 
-  /* ---------- Scroll reveals via IntersectionObserver ---------- */
-  function initScrollAnimations() {
-    document.documentElement.classList.add('js-ready');
-    var els = document.querySelectorAll('.reveal, [data-reveal]');
+  /* IntersectionObserver reveal on scroll */
+  function initReveal(){
+    var els = document.querySelectorAll('.reveal');
     if (!els.length) return;
-
-    if ('IntersectionObserver' in window) {
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in');
-            io.unobserve(entry.target);
-          }
-        });
-      }, { rootMargin: '0px 0px -8% 0px' });
-      els.forEach(function (el) { io.observe(el); });
-    } else {
-      els.forEach(function (el) { el.classList.add('in'); });
-    }
-
-    // Safety: reveal everything still hidden after 3s (if user lingers offscreen)
-    setTimeout(function () {
-      els.forEach(function (el) { el.classList.add('in'); });
-    }, 3000);
-  }
-
-  /* ---------- Stat counters ---------- */
-  function initStatCounters() {
-    var counters = document.querySelectorAll('[data-count-to]');
-    if (!counters.length) return;
-    if (!('IntersectionObserver' in window)) {
-      counters.forEach(function (el) {
-        el.textContent = el.getAttribute('data-count-to');
-      });
+    if (!('IntersectionObserver' in window)){
+      els.forEach(function(el){ el.classList.add('is-in'); });
       return;
     }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        var el = entry.target;
-        var target = parseFloat(el.getAttribute('data-count-to')) || 0;
-        var suffix = el.getAttribute('data-suffix') || '';
-        var prefix = el.getAttribute('data-prefix') || '';
-        var duration = 1200;
-        var start = performance.now();
-        function tick(now) {
-          var t = Math.min(1, (now - start) / duration);
-          var eased = 1 - Math.pow(1 - t, 3);
-          var current = Math.round(target * eased);
-          el.textContent = prefix + current.toLocaleString() + suffix;
-          if (t < 1) requestAnimationFrame(tick);
-          else el.textContent = prefix + target.toLocaleString() + suffix;
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          entry.target.classList.add('is-in');
+          io.unobserve(entry.target);
         }
-        requestAnimationFrame(tick);
-        io.unobserve(el);
       });
-    }, { threshold: 0.4 });
-    counters.forEach(function (el) { io.observe(el); });
-  }
-
-  /* ---------- Marquee — clone children for seamless loop (safe DOM clone) ---------- */
-  function initMarqueeClone() {
-    document.querySelectorAll('.marquee-track').forEach(function (track) {
-      if (track.dataset.cloned === 'true') return;
-      var frag = document.createDocumentFragment();
-      Array.prototype.forEach.call(track.children, function (child) {
-        frag.appendChild(child.cloneNode(true));
-      });
-      track.appendChild(frag);
-      track.dataset.cloned = 'true';
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(function(el){ io.observe(el); });
+    // Immediately reveal anything already inside the viewport at first paint.
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    els.forEach(function(el){
+      var r = el.getBoundingClientRect();
+      if (r.top < vh && r.bottom > 0) el.classList.add('is-in');
     });
+    // Final safety net: after 1.2s, reveal anything still hidden.
+    setTimeout(function(){
+      els.forEach(function(el){ el.classList.add('is-in'); });
+    }, 1200);
   }
 
-  /* ---------- Dynamic copyright year ---------- */
-  function initCopyYear() {
-    var year = new Date().getFullYear();
-    document.querySelectorAll('[data-year]').forEach(function (el) {
-      el.textContent = year;
-    });
-  }
-
-  /* ---------- Lead Capture Modal ---------- */
-  function initLeadModal() {
-    var modal = document.getElementById('leadModal');
+  /* Lead capture modal (shared) */
+  function initLeadModal(){
+    var modal = document.getElementById('lead-modal');
     if (!modal) return;
 
-    var openTriggers = document.querySelectorAll('[data-cta="lead-modal"]');
-    var closeBtn = modal.querySelector('.lead-modal__close');
-    var backdrop = modal.querySelector('.lead-modal__backdrop');
     var form = modal.querySelector('form');
-    var programSelect = modal.querySelector('#leadProgram');
+    var selectEl = modal.querySelector('#lead-program');
+    var closeBtn = modal.querySelector('[data-close]');
+    var overlay  = modal.querySelector('.modal-overlay');
 
-    function openModal(presetProgram) {
-      modal.classList.add('open');
-      document.body.style.overflow = 'hidden';
-      if (presetProgram && programSelect) {
-        programSelect.value = presetProgram;
-      }
-      setTimeout(function () {
-        var firstInput = modal.querySelector('input');
-        if (firstInput) firstInput.focus();
-      }, 200);
-    }
-
-    function closeModal() {
-      modal.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-
-    openTriggers.forEach(function (btn) {
-      btn.addEventListener('click', function (e) {
-        e.preventDefault();
-        var preset = btn.getAttribute('data-program');
-        openModal(preset);
-      });
-    });
-
-    if (closeBtn) closeBtn.addEventListener('click', closeModal);
-    if (backdrop) backdrop.addEventListener('click', closeModal);
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
-    });
-
-    var phoneInput = modal.querySelector('#leadPhone');
-    if (phoneInput) {
-      phoneInput.addEventListener('input', function (e) {
-        var digits = e.target.value.replace(/\D/g, '').slice(0, 10);
-        var formatted = digits;
-        if (digits.length > 6) {
-          formatted = '(' + digits.slice(0, 3) + ') ' + digits.slice(3, 6) + '-' + digits.slice(6);
-        } else if (digits.length > 3) {
-          formatted = '(' + digits.slice(0, 3) + ') ' + digits.slice(3);
-        } else if (digits.length > 0) {
-          formatted = '(' + digits;
+    var setState = function(next, preselect){
+      modal.setAttribute('aria-hidden', String(!next));
+      document.body.classList.toggle('no-scroll', next);
+      if (next && preselect && selectEl){
+        for (var i=0; i<selectEl.options.length; i++){
+          if (selectEl.options[i].value === preselect){ selectEl.selectedIndex = i; break; }
         }
-        e.target.value = formatted;
-      });
-    }
-
-    if (form) {
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var data = {
-          firstName: form.querySelector('#leadFirstName').value.trim(),
-          lastName: form.querySelector('#leadLastName').value.trim(),
-          email: form.querySelector('#leadEmail').value.trim(),
-          phone: form.querySelector('#leadPhone').value.trim(),
-          program: form.querySelector('#leadProgram').value,
-          submittedAt: new Date().toISOString()
-        };
-        try {
-          sessionStorage.setItem('leadFormData', JSON.stringify(data));
-        } catch (err) { /* storage might be disabled */ }
-        // TODO: wire backend capture (GHL webhook / CRM) here if desired.
-        window.location.href = 'booking.html?program=' + encodeURIComponent(data.program);
-      });
-    }
-  }
-
-  /* ---------- Video Modal (inline YouTube player) ---------- */
-  function initVideoModal() {
-    var modal = document.getElementById('videoModal');
-    if (!modal) return;
-
-    var triggers = document.querySelectorAll('[data-video-id]');
-    if (!triggers.length) return;
-
-    var frame = modal.querySelector('#videoModalFrame');
-    var titleEl = modal.querySelector('#videoModalTitle');
-    var closeEls = modal.querySelectorAll('[data-video-close]');
-    var lastTrigger = null;
-
-    function clearFrame() {
-      while (frame.firstChild) frame.removeChild(frame.firstChild);
-    }
-
-    function appendLoader() {
-      var loader = document.createElement('div');
-      loader.className = 'video-modal__frame-loader';
-      loader.textContent = 'Loading video…';
-      frame.appendChild(loader);
-    }
-
-    function buildEmbed(id) {
-      // Use youtube.com/embed (not nocookie) and omit autoplay — "Made for kids"
-      // videos (required flag for kids-program content under COPPA) reject
-      // autoplay=1 with error 153 "player configuration error." User clicks
-      // play inside the iframe after the modal opens.
-      var src = 'https://www.youtube.com/embed/' + encodeURIComponent(id) +
-                '?rel=0&playsinline=1';
-      var iframe = document.createElement('iframe');
-      iframe.setAttribute('src', src);
-      iframe.setAttribute('title', titleEl.textContent || 'Video player');
-      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
-      iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
-      iframe.setAttribute('allowfullscreen', '');
-      iframe.setAttribute('loading', 'lazy');
-      return iframe;
-    }
-
-    function openModal(id, title, trigger) {
-      if (!id) return;
-      lastTrigger = trigger || null;
-      titleEl.textContent = title || 'Now Watching';
-      clearFrame();
-      appendLoader();
-      frame.appendChild(buildEmbed(id));
-      modal.classList.add('open');
-      modal.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-      // Move focus into the modal for keyboard users
-      setTimeout(function () {
-        var closeBtn = modal.querySelector('.video-modal__close');
-        if (closeBtn) closeBtn.focus();
-      }, 40);
-    }
-
-    function closeModal() {
-      modal.classList.remove('open');
-      modal.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-      // Wipe the iframe so playback (and audio) fully stops.
-      clearFrame();
-      if (lastTrigger && typeof lastTrigger.focus === 'function') {
-        try { lastTrigger.focus(); } catch (e) { /* noop */ }
       }
-    }
+      if (next){
+        setTimeout(function(){
+          var first = modal.querySelector('input,select,button');
+          if (first) first.focus();
+        }, 60);
+      }
+    };
 
-    triggers.forEach(function (el) {
-      el.addEventListener('click', function (e) {
-        var id = el.getAttribute('data-video-id');
-        if (!id) return; // fall back to default link behavior
+    document.querySelectorAll('[data-open-lead]').forEach(function(trigger){
+      trigger.addEventListener('click', function(e){
         e.preventDefault();
-        openModal(id, el.getAttribute('data-video-title') || '', el);
+        var preselect = trigger.getAttribute('data-program') || '';
+        setState(true, preselect);
       });
     });
 
-    closeEls.forEach(function (el) {
-      el.addEventListener('click', closeModal);
+    if (closeBtn) closeBtn.addEventListener('click', function(){ setState(false); });
+    if (overlay)  overlay.addEventListener('click',  function(){ setState(false); });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false'){ setState(false); }
     });
 
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+    if (form){
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        var fd = new FormData(form);
+        var program = encodeURIComponent(fd.get('program') || '');
+        var first   = encodeURIComponent(fd.get('first') || '');
+        var last    = encodeURIComponent(fd.get('last') || '');
+        var email   = encodeURIComponent(fd.get('email') || '');
+        var phone   = encodeURIComponent(fd.get('phone') || '');
+        var q = 'program=' + program +
+                '&first='  + first +
+                '&last='   + last +
+                '&email='  + email +
+                '&phone='  + phone;
+        window.location.href = 'booking.html?' + q;
+      });
+    }
+  }
+
+  /* Cursor-follow glow on bento tiles */
+  function initBentoTilt(){
+    var tiles = document.querySelectorAll('.bento .tile, .prog, .coach, .report');
+    tiles.forEach(function(tile){
+      tile.addEventListener('mousemove', function(e){
+        var rect = tile.getBoundingClientRect();
+        var x = ((e.clientX - rect.left) / rect.width) * 100;
+        var y = ((e.clientY - rect.top)  / rect.height) * 100;
+        tile.style.setProperty('--mx', x + '%');
+        tile.style.setProperty('--my', y + '%');
+      });
     });
   }
 
-  /* ---------- Booking page — show correct calendar ---------- */
-  function initBookingPage() {
-    if (!document.body.classList.contains('booking-page')) return;
+  /* Booking page: read program param, activate calendar + switcher */
+  function initBookingPage(){
+    var page = document.querySelector('[data-page="booking"]');
+    if (!page) return;
 
     var params = new URLSearchParams(window.location.search);
-    var program = params.get('program') || 'adult-fundamentals';
+    var initial = params.get('program') || 'adult-fundamentals';
 
-    var lead = null;
-    try { lead = JSON.parse(sessionStorage.getItem('leadFormData') || 'null'); }
-    catch (e) { /* ignore */ }
+    var frames   = page.querySelectorAll('[data-program]');
+    var switches = page.querySelectorAll('.program-switcher button');
+    var label    = page.querySelector('[data-program-label]');
 
-    if (lead && lead.firstName) {
-      var greeting = document.querySelector('[data-greeting]');
-      if (greeting) {
-        greeting.textContent = lead.firstName + ", you're almost done.";
-      }
+    var nameFor = function(slug){
+      var map = {
+        'adult-fundamentals': 'Adult Fundamentals',
+        'adult-all-levels':   'Adult All-Levels',
+        'nano-techs':         'Nano Techs (ages 4–6)',
+        'kids-jiu-jitsu':     'Kids Jiu-Jitsu (ages 6–12)',
+        'family-plan':        'Family Plan',
+        'kickstart-trial':    'Kickstart Trial'
+      };
+      return map[slug] || 'Your Class';
+    };
+
+    var activate = function(slug){
+      frames.forEach(function(f){ f.classList.toggle('is-active', f.getAttribute('data-program') === slug); });
+      switches.forEach(function(b){ b.classList.toggle('is-active', b.getAttribute('data-program') === slug); });
+      if (label) label.textContent = nameFor(slug);
+      try{
+        var url = new URL(window.location.href);
+        url.searchParams.set('program', slug);
+        window.history.replaceState({}, '', url);
+      }catch(_){}
+    };
+
+    switches.forEach(function(btn){
+      btn.addEventListener('click', function(){ activate(btn.getAttribute('data-program')); });
+    });
+
+    activate(initial);
+
+    var firstName = params.get('first');
+    if (firstName){
+      var greet = page.querySelector('[data-greet]');
+      if (greet) greet.textContent = decodeURIComponent(firstName) + ',';
     }
+  }
 
-    function showCalendar(id) {
-      document.querySelectorAll('.booking-calendar').forEach(function (c) {
-        c.classList.remove('active');
-      });
-      var target = document.querySelector('.booking-calendar[data-program="' + id + '"]');
-      if (target) target.classList.add('active');
-
-      document.querySelectorAll('.program-chip').forEach(function (chip) {
-        chip.classList.toggle('active', chip.getAttribute('data-program') === id);
-      });
-    }
-
-    var initialExists = document.querySelector('.booking-calendar[data-program="' + program + '"]');
-    if (initialExists) {
-      showCalendar(program);
-    } else {
-      var first = document.querySelector('.booking-calendar');
-      if (first) showCalendar(first.getAttribute('data-program'));
-    }
-
-    document.querySelectorAll('.program-chip').forEach(function (chip) {
-      chip.addEventListener('click', function () {
-        showCalendar(chip.getAttribute('data-program'));
-      });
+  /* Copyright year */
+  function initYearStamp(){
+    var year = new Date().getFullYear();
+    document.querySelectorAll('[data-year]').forEach(function(el){
+      el.textContent = String(year);
     });
   }
+
+  /* Animate mini bar-chart on reveal */
+  function initBarsFill(){
+    var bars = document.querySelectorAll('.bars');
+    if (!bars.length) return;
+    if (!('IntersectionObserver' in window)){
+      bars.forEach(run);
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){ run(entry.target); io.unobserve(entry.target); }
+      });
+    }, { threshold: 0.3 });
+    bars.forEach(function(b){ io.observe(b); });
+
+    function run(bar){
+      var spans = bar.querySelectorAll('span');
+      spans.forEach(function(s, i){
+        setTimeout(function(){
+          var h = s.getAttribute('data-h') || String(20 + (i * 11) % 75);
+          s.style.height = h + '%';
+        }, i * 90);
+      });
+    }
+  }
+
 })();
