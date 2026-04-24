@@ -1,0 +1,280 @@
+{
+  "name": "10th Planet Pasadena",
+  "slug": "10th-planet-pasadena",
+  "website": "https://www.10thplanetpasadena.com",
+  "businessType": "No-Gi Brazilian Jiu-Jitsu Academy",
+  "tagline": "Premier No-Gi Jiu-Jitsu. All Ages. All Levels.",
+  "location": {
+    "city": "Altadena",
+    "metroArea": "Pasadena",
+    "state": "CA",
+    "zip": "91001",
+    "country": "USA"
+  },
+  "siteStructure": {
+    "totalPages": 12,
+    "isSinglePage": false,
+    "pages": [
+      { "url": "https://www.10thplanetpasadena.com/", "label": "Home", "slug": "index", "type": "home", "screenshotPath": "sites/10th-planet-pasadena/screenshot-before.png" },
+      { "url": "https://www.10thplanetpasadena.com/classes", "label": "Classes", "slug": "classes", "type": "services" },
+      { "url": "https://www.10thplanetpasadena.com/10th-planet-pasadena-coaches", "label": "Instructors", "slug": "instructors", "type": "team" },
+      { "url": "https://www.10thplanetpasadena.com/10th-planet-pasadena-schedule", "label": "Schedule", "slug": "schedule", "type": "schedule" },
+      { "url": "https://www.10thplanetpasadena.com/memberships", "label": "Memberships", "slug": "memberships", "type": "pricing" },
+      { "url": "https://www.10thplanetpasadena.com/kids-video", "label": "Kids Video", "slug": "kids-video", "type": "video" },
+      { "url": "https://www.10thplanetpasadena.com/gallery", "label": "Gallery", "slug": "gallery", "type": "gallery" },
+      { "url": "https://www.10thplanetpasadena.com/main-lead-form", "label": "Free Trial", "slug": "free-trial", "type": "trial" },
+      { "url": "https://www.10thplanetpasadena.com/contact", "label": "Contact", "slug": "contact", "type": "contact" },
+      { "url": "https://www.10thplanetpasadena.com/nano-techs-video", "label": "Nano Techs Video", "slug": "nano-techs-video", "type": "video" },
+      { "url": "https://www.10thplanetpasadena.com/promo-video", "label": "Promo Video", "slug": "promo-video", "type": "video" },
+      { "url": "https://www.10thplanetpasadena.com/videos", "label": "Videos", "slug": "videos", "type": "video-library" }
+    ]
+  },
+  "pageContent": {
+    "home": {
+      "heroHeadline": "Unleash the Grappler Within",
+      "heroSubheadline": "Premier No-Gi Jiu-Jitsu in Altadena under 3rd-degree 10th Planet Black Belt Erik \"Compella\" Cruz. Classes for all ages and all levels.",
+      "heroCTA": "Start Your Free Trial",
+      "heroSecondaryCTA": "Explore Classes",
+      "valueProps": [
+        { "icon": "flash", "title": "Revolutionary System", "body": "Train Eddie Bravo's innovative 10th Planet Jiu-Jitsu — the most dynamic no-gi system in modern grappling." },
+        { "icon": "dumbbell", "title": "Real Fitness", "body": "Our classes build strength, flexibility, and endurance while you learn the art of submission grappling." },
+        { "icon": "brain", "title": "Mental Resilience", "body": "Jiu-jitsu is a mental game as much as a physical one. Train toughness, focus, and confidence." },
+        { "icon": "badge", "title": "World-Class Coaching", "body": "Five 10th Planet Black Belts on staff. Personal instruction at every level." },
+        { "icon": "users", "title": "Inclusive Community", "body": "From first-day white belts to pro competitors — we train hard and take care of each other." }
+      ],
+      "programs": [
+        { "name": "Adult Fundamentals", "tagline": "The blueprint. Learn the system from the ground up.", "ages": "14+" },
+        { "name": "Adult All-Levels", "tagline": "Drill, live spar, and master the Rubber Guard, Truck, Lockdown & Leg Lock systems.", "ages": "14+" },
+        { "name": "Nano Techs", "tagline": "Character, confidence, and first movements. Twice a week, 45 minutes.", "ages": "4-6" },
+        { "name": "Kids Jiu-Jitsu", "tagline": "Structured 10P system in a safe, disciplined environment.", "ages": "6-12" }
+      ],
+      "testimonials": [
+        { "name": "George Yu", "quote": "Great coaches, staff and training facility! Super high level jiujitsu with people of all levels. Children program is amazing as well. Very clean and spacious." },
+        { "name": "Brandon Rufino", "quote": "Awesome community, very easy to get along with. Everyone's on the same page whether you're a competitor or hobbyist — everyone takes care of each other. Very beginner friendly but also high-level team mates & classes for advanced people." },
+        { "name": "Rebecca G.", "quote": "My son has been attending 10th Planet Pasadena for over a year and I couldn't be happier with his progress. The coaches are incredibly dedicated and patient. My son has developed a strong sense of confidence. Highly recommend." }
+      ]
+    },
+    "classes": {
+      "heading": "No-Gi Jiu-Jitsu in Pasadena",
+      "intro": "Four programs. One world-class system. Pick your track and step onto the mat.",
+      "serviceList": [
+        {
+          "name": "Adult Fundamentals",
+          "ages": "14+",
+          "description": "Every great grappler starts here. Our fundamentals curriculum teaches takedowns, submissions, positional control, and sweeping — the foundation for everything in the 10th Planet system. Rubber-guard, The Lockdown, The Truck, and Leg Lock concepts are introduced early so you're speaking the 10P language from day one.",
+          "includes": ["Takedowns", "Submissions", "Positional control", "Live drilling every class"]
+        },
+        {
+          "name": "Adult All-Levels",
+          "ages": "14+",
+          "description": "Deep 10th Planet system work. Extensive drilling of transitional movement combined with advanced strategies. Takedown, technique, live drill, sparring — with precision and speed. Mastery of Rubber-Guard, Truck, Lockdown, and Leg Lock systems are major components of this curriculum.",
+          "includes": ["Rubber Guard system", "Truck system", "Lockdown", "Leg Lock system", "Open sparring"]
+        },
+        {
+          "name": "Nano Techs",
+          "ages": "4-6",
+          "description": "The first step for your child. Nano Techs teaches the basics of jiu-jitsu in a safe, fun environment with an emphasis on character building, self-confidence, and discipline at an early age. The class meets twice a week for 45 minutes — the perfect introduction to martial arts.",
+          "includes": ["Twice per week", "45 minutes", "Character focus", "Safe, fun environment"]
+        },
+        {
+          "name": "Kids Jiu-Jitsu",
+          "ages": "6-12",
+          "description": "A disciplined environment built around 10th Planet's grappling system for kids. Character building, good citizenship, and real technique — fundamentals developed through regular sparring in class.",
+          "includes": ["Structured curriculum", "Regular sparring", "Character & citizenship", "Progression tracking"]
+        }
+      ]
+    },
+    "instructors": {
+      "heading": "The 10P Pasadena Coaching Staff",
+      "intro": "Five black belts and a brown belt. All credentialed under the 10th Planet system. All on the mat.",
+      "team": [
+        { "name": "Erik \"Compella\" Cruz", "role": "Founder & Head Instructor", "rank": "3rd Degree 10th Planet Black Belt" },
+        { "name": "Lila Smadja-Cruz", "role": "Founder, 10th Planet Women's Self Defense", "rank": "1st Degree 10th Planet Black Belt" },
+        { "name": "George Jáuregui", "role": "Head Kids Coach", "rank": "1st Degree 10th Planet Black Belt" },
+        { "name": "Rudy Garcia", "role": "Instructor", "rank": "10th Planet Black Belt" },
+        { "name": "Jordan Gaskins", "role": "Instructor", "rank": "10th Planet Black Belt" },
+        { "name": "Steven Belanger", "role": "Instructor", "rank": "10th Planet Brown Belt" }
+      ]
+    },
+    "schedule": {
+      "heading": "Class Schedule",
+      "intro": "Train seven days a week. Morning, evening, kids, and adults — here's the weekly rhythm.",
+      "weekly": [
+        { "day": "Monday", "sessions": [
+          { "time": "6:30 AM", "duration": "60 min", "class": "All Levels 10PJJ" },
+          { "time": "6:00 PM", "duration": "60 min", "class": "Kids & Teens 10PJJ" },
+          { "time": "7:00 PM", "duration": "60 min", "class": "Fundamentals" },
+          { "time": "8:00 PM", "duration": "60 min", "class": "All Levels 10PJJ" }
+        ]},
+        { "day": "Tuesday", "sessions": [
+          { "time": "6:30 AM", "duration": "60 min", "class": "All Levels 10PJJ" },
+          { "time": "6:00 PM", "duration": "60 min", "class": "Kids & Teens 10PJJ" },
+          { "time": "7:00 PM", "duration": "60 min", "class": "Fundamentals" },
+          { "time": "8:00 PM", "duration": "60 min", "class": "All Levels 10PJJ" }
+        ]},
+        { "day": "Wednesday", "sessions": [
+          { "time": "6:30 AM", "duration": "60 min", "class": "All Levels 10PJJ" },
+          { "time": "6:00 PM", "duration": "60 min", "class": "Kids & Teens 10PJJ" },
+          { "time": "7:00 PM", "duration": "60 min", "class": "Fundamentals" },
+          { "time": "8:00 PM", "duration": "60 min", "class": "All Levels 10PJJ" }
+        ]},
+        { "day": "Thursday", "sessions": [
+          { "time": "6:30 AM", "duration": "60 min", "class": "All Levels 10PJJ" },
+          { "time": "6:00 PM", "duration": "60 min", "class": "Kids & Teens 10PJJ" },
+          { "time": "7:00 PM", "duration": "60 min", "class": "Fundamentals" },
+          { "time": "8:00 PM", "duration": "60 min", "class": "All Levels 10PJJ" }
+        ]},
+        { "day": "Friday", "sessions": [
+          { "time": "6:30 AM", "duration": "60 min", "class": "All Levels 10PJJ" },
+          { "time": "6:00 PM", "duration": "60 min", "class": "Open Mat" }
+        ]},
+        { "day": "Saturday", "sessions": [
+          { "time": "10:00 AM", "duration": "90 min", "class": "All Levels 10PJJ" },
+          { "time": "11:30 AM", "duration": "60 min", "class": "Open Mat" }
+        ]},
+        { "day": "Sunday", "sessions": [
+          { "time": "10:00 AM", "duration": "90 min", "class": "Open Mat" }
+        ]}
+      ],
+      "note": "Schedule is subject to change — confirm on the day by calling (626) 708-0771."
+    },
+    "memberships": {
+      "heading": "Memberships",
+      "intro": "Built for consistency. Built for progress. Pick the plan that matches how often you want to train.",
+      "plans": [
+        {
+          "name": "Kickstart Trial",
+          "price": "Free",
+          "cadence": "One class, on us",
+          "description": "Step on the mat before you commit. No pressure, no experience needed.",
+          "cta": "Claim My Free Class",
+          "highlight": false
+        },
+        {
+          "name": "Unlimited Adult",
+          "price": "Contact for pricing",
+          "cadence": "per month",
+          "description": "All adult classes. All week. Every mat. Fundamentals, All-Levels, and Open Mat — train as often as you want.",
+          "cta": "Start Membership",
+          "highlight": true,
+          "features": [
+            "Unlimited Fundamentals classes",
+            "Unlimited All-Levels classes",
+            "Saturday & Sunday Open Mat",
+            "Access to seminars & events"
+          ]
+        },
+        {
+          "name": "Kids Program",
+          "price": "Contact for pricing",
+          "cadence": "per month",
+          "description": "Nano Techs (ages 4–6) or Kids Jiu-Jitsu (ages 6–12). Discipline, confidence, and real skill.",
+          "cta": "Enroll My Child",
+          "highlight": false,
+          "features": [
+            "Age-appropriate curriculum",
+            "Character & citizenship focus",
+            "Regular progression milestones",
+            "Family discounts available"
+          ]
+        },
+        {
+          "name": "Family Plan",
+          "price": "Contact for pricing",
+          "cadence": "per month",
+          "description": "Two or more family members train at a discounted rate. The whole family on the mat.",
+          "cta": "Ask About Family Plans",
+          "highlight": false
+        }
+      ],
+      "note": "Membership pricing is confirmed on a short call. No sign-up fee, no long-term contract."
+    },
+    "gallery": {
+      "heading": "Inside The Academy",
+      "description": "Mats, competitions, community. A look at life at 10th Planet Pasadena.",
+      "categories": ["Training", "Competition", "Kids Program", "Community"]
+    },
+    "kidsVideo": {
+      "heading": "Kids Jiu-Jitsu — See It in Action",
+      "description": "A look inside our Kids class for ages 6–12. Structured, safe, and fun — with real 10th Planet technique.",
+      "programHighlights": [
+        "Ages 6–12",
+        "Discipline & citizenship focus",
+        "Regular live sparring",
+        "Coach George Jáuregui leading the mats"
+      ]
+    },
+    "nanoTechsVideo": {
+      "heading": "Nano Techs — First Steps on the Mat",
+      "description": "Our Nano Techs program introduces ages 4–6 to the movements, confidence, and discipline that jiu-jitsu builds at an early age.",
+      "programHighlights": [
+        "Ages 4–6",
+        "Twice per week, 45 minutes",
+        "Character-first curriculum",
+        "Safe, fun environment"
+      ]
+    },
+    "promoVideo": {
+      "heading": "This is 10th Planet Pasadena",
+      "description": "Three minutes inside one of Southern California's most technical No-Gi rooms.",
+      "quote": "Under the guidance of Erik \"Compella\" Cruz, an Eddie Bravo Black Belt, we offer a revolutionary approach to jiu-jitsu."
+    },
+    "videos": {
+      "heading": "Technique Library",
+      "intro": "Free 10th Planet technique breakdowns from our coaching staff. Take notes.",
+      "videos": [
+        { "title": "Back Take from Side Control", "coach": "Erik \"Compella\" Cruz", "description": "A way to take the back from side control." },
+        { "title": "Heel Hook Details", "coach": "Eric Ramey", "description": "Details on the Outside Heel Hook from a standard Ashi Garami." },
+        { "title": "Peruvian Neck Tie", "coach": "Erik \"Compella\" Cruz", "description": "Details of the Peruvian Necktie from the Front Headlock." },
+        { "title": "Toe Hold from Inside Ashi Garami", "coach": "Eric Ramey", "description": "Details for the toe hold from inside Ashi Garami." },
+        { "title": "Spinning Knee Bar to Heel Hook", "coach": "Erik Cruz", "description": "The spinning knee bar from the knee slice pass with an inside heel hook option." },
+        { "title": "Back to Crucifix to One Arm Choke", "coach": "10P Pasadena", "description": "A transition from the Back to the Crucifix and finishing with the Single Arm Choke." },
+        { "title": "Passing Series M1–M4", "coach": "Erik \"Compella\" Cruz", "description": "A series of open guard passes, linking each move to the next." },
+        { "title": "Toreando & Leg Drag Passes", "coach": "Eric Ramey & Erik Cruz", "description": "A variation of the Toreando and Leg Drag passes." }
+      ]
+    },
+    "freeTrial": {
+      "heading": "Claim Your Free Class",
+      "subheading": "One class. No experience needed. No pressure.",
+      "intro": "Fill out the form and we'll get back to you within 24 hours to schedule your first class. Wear comfortable workout clothes — we'll provide everything else.",
+      "whatToExpect": [
+        "Arrive 15 minutes early",
+        "Meet your coach & tour the facility",
+        "Warm-up, instruction, and controlled drilling",
+        "No sparring on day one — we start you safely"
+      ]
+    },
+    "contact": {
+      "heading": "Get in Touch",
+      "phone": "(626) 708-0771",
+      "email": "10thplanetpasadena@gmail.com",
+      "address": "2333 North Lake Avenue, Altadena, CA, 91001",
+      "textPreferred": true,
+      "mapEmbed": true
+    }
+  },
+  "socialMedia": {
+    "instagram": "https://www.instagram.com/10thplanetpasadena",
+    "youtube": "https://www.youtube.com/channel/UCvoBROGo2rx9vBzchk-zOdA"
+  },
+  "brandColors": ["#FFEE03", "#223855", "#1E1E1E", "#FFFFFF", "#EEEEEE"],
+  "brandColorRoles": {
+    "primary": "#FFEE03",
+    "secondary": "#223855",
+    "background": "#0B0C0E",
+    "surface": "#141518",
+    "accent": "#FFEE03",
+    "textDark": "#141518",
+    "textLight": "#F5F5F7"
+  },
+  "logoUrl": "https://lirp.cdn-website.com/8ec24a7d/dms3rep/multi/opt/10thPlanetPasadena_logo-2x-1920w.png",
+  "existingImages": {
+    "logo": { "found": true, "url": "https://lirp.cdn-website.com/8ec24a7d/dms3rep/multi/opt/10thPlanetPasadena_logo-2x-1920w.png", "format": "PNG" },
+    "team": [],
+    "gallery": { "count": 9, "appearsReal": true },
+    "facility": { "count": 0, "description": "No facility photos evident on current site" }
+  },
+  "designRecommendation": "performance-athletic-skill",
+  "designRationale": "10th Planet Pasadena is a competitive BJJ academy with a bold visual identity (electric yellow #FFEE03 + navy #223855), six credentialed coaches, and programs for every age from Nano Techs (4-6) through adult all-levels. performance-athletic-skill is the default pick for accessible-but-credible combat sports — it delivers bold sportswear-brand energy with a single electric accent, which pairs perfectly with the existing yellow. cinematic-fight-skill was a second option but 10P Pasadena leads with inclusivity (kids, beginners, community) more than pro-fighter aesthetics.",
+  "currentSiteIssues": "Built on a generic SiteSwan/Duda-style template with low design investment. Weak typographic hierarchy, inconsistent photography, tiny hero treatment buried under nav, no clear visual identity beyond the yellow accent. Testimonials and class info are crammed into single-column blocks. Mobile experience is cramped. Zero imagery of the actual facility or coaches. 'RETAIL' link in nav leads nowhere. Missing schema markup, no clear booking funnel. Overall looks 2014-era small-business template."
+}

@@ -1,0 +1,65 @@
+{
+  "slug": "10th-planet-pasadena",
+  "originalColors": ["#FFEE03", "#223855", "#463939", "#587291", "#1E1E1E", "#EEEEEE", "#FFFFFF", "#000000"],
+  "validatedBrandColors": {
+    "logoAndCtaColors": ["#FFEE03", "#223855"],
+    "dropped": [
+      { "color": "#463939", "reason": "Warm brown bleed from a hero/testimonial background photo — not a brand color." },
+      { "color": "#587291", "reason": "Desaturated sibling of navy — collapses into the primary navy hierarchy." }
+    ],
+    "retained": [
+      { "color": "#FFEE03", "role": "primary accent", "evidence": "Featured in logo plate, 'START YOUR FREE TRIAL' ribbon, and all primary CTA buttons." },
+      { "color": "#223855", "role": "supporting brand color", "evidence": "Primary h1/heading color site-wide." },
+      { "color": "#1E1E1E", "role": "neutral dark base", "evidence": "Body/heading default on lower sections." },
+      { "color": "#EEEEEE", "role": "neutral light surface", "evidence": "Section background for testimonials and class grid." }
+    ]
+  },
+  "colorAudit": {
+    "contrastIssues": [
+      "#FFEE03 vs. #EEEEEE (current yellow-on-light-gray CTAs) = 1.3:1 — fails WCAG AA dramatically.",
+      "#223855 vs. #EEEEEE for headings passes (9.3:1) but loses visual punch against the lifeless gray.",
+      "Current site mixes dark-hero and light-body inconsistently, fragmenting the brand."
+    ],
+    "harmonyType": "complementary-athletic (electric yellow + deep navy — a naturally sportswear-coded pairing)",
+    "hierarchyStatus": "weak — the electric yellow competes with stock hero imagery instead of anchoring the brand. No clear surface/background hierarchy.",
+    "saturationNotes": "Yellow is at the absolute edge of saturation/brightness — it needs a dark substrate to feel premium instead of cheap."
+  },
+  "correctedPalette": {
+    "--bg": "#0B0C0E",
+    "--bg-card": "#141518",
+    "--bg-elevated": "#1B1D21",
+    "--border": "rgba(255, 238, 3, 0.08)",
+    "--border-strong": "rgba(255, 255, 255, 0.12)",
+    "--text-primary": "#F5F5F7",
+    "--text-muted": "#9A9AA3",
+    "--text-subtle": "#6B6B74",
+    "--accent": "#FFEE03",
+    "--accent-hover": "#FFD600",
+    "--accent-pressed": "#E6C900",
+    "--accent-subtle": "rgba(255, 238, 3, 0.10)",
+    "--accent-glow": "rgba(255, 238, 3, 0.25)",
+    "--secondary": "#3B5A85",
+    "--secondary-deep": "#223855",
+    "--success": "#4ADE80",
+    "--danger": "#EF4444"
+  },
+  "mode": "dark",
+  "modeRationale": "The existing site already uses a dark hero as its strongest moment — we commit to dark across all sections. Yellow #FFEE03 is only visually premium against a deep substrate; on white it reads as a 1995 highlighter. Dark substrate also resolves the current site's light/dark inconsistency and lets the performance-athletic-skill kinetic typography land.",
+  "colorShifts": [
+    "Kept #FFEE03 verbatim as --accent — it's the strongest brand asset and the whole design will orbit it.",
+    "Kept #223855 as --secondary-deep for section dividers, chart bars, and team-card badges.",
+    "Shifted --bg from #EEEEEE (light gray) to #0B0C0E (near-black with a cold tint) — lets the yellow hit like a signal flare.",
+    "Introduced two dark surface tiers (#141518 card, #1B1D21 elevated) so bento/stat cards have hierarchy without losing the blackout feeling.",
+    "Derived --border from the accent at 8% opacity so structure reads as 'on-brand' even without yellow fill.",
+    "Dropped #463939 and #587291 — neither survived logo/navbar validation."
+  ],
+  "fontRecommendation": {
+    "code": "F-ATHLETIC",
+    "display": "Archivo Black (900) OR Syne 700-800 — wide, athletic, sportswear-coded",
+    "body": "Inter 400-600 OR Manrope 400-600",
+    "mono": "JetBrains Mono 500 (for technique/time labels, schedule grids)",
+    "reasoning": "Performance-athletic-skill calls for wide, brand-forward display type paired with neutral, highly legible body. Archivo Black delivers the 'stamped on a jersey' energy that matches 10P's competitive identity. Inter body keeps technique descriptions and schedules airtight."
+  },
+  "designStyle": "performance-athletic-skill",
+  "cssBlock": ":root {\n  --bg: #0B0C0E;\n  --bg-card: #141518;\n  --bg-elevated: #1B1D21;\n  --border: rgba(255, 238, 3, 0.08);\n  --border-strong: rgba(255, 255, 255, 0.12);\n  --text-primary: #F5F5F7;\n  --text-muted: #9A9AA3;\n  --text-subtle: #6B6B74;\n  --accent: #FFEE03;\n  --accent-hover: #FFD600;\n  --accent-pressed: #E6C900;\n  --accent-subtle: rgba(255, 238, 3, 0.10);\n  --accent-glow: rgba(255, 238, 3, 0.25);\n  --secondary: #3B5A85;\n  --secondary-deep: #223855;\n  --success: #4ADE80;\n  --danger: #EF4444;\n}"
+}
