@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Nano Techs — Program Video | 10th Planet Pasadena</title>
   <meta name="description" content="Watch our Nano Techs program for ages 4-6. Twice per week, 45 minutes. Character building, confidence, and first steps on the mat.">
-  <meta name="theme-color" content="#0B0C0E">
+  <meta name="theme-color" content="#0E0E0C">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://10th-planet-pasadena.pages.dev/nano-techs-video.html">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2210%22%20fill%3D%22%230B0C0E%22/%3E%3Ctext%20x%3D%2232%22%20y%3D%2244%22%20font-family%3D%22Impact%2C%20Arial%20Black%2C%20sans-serif%22%20font-size%3D%2236%22%20font-weight%3D%22900%22%20text-anchor%3D%22middle%22%20fill%3D%22%23FFEE03%22%3E10P%3C/text%3E%3C/svg%3E">
@@ -32,7 +32,7 @@
   <meta name="ICBM" content="34.2114, -118.1287">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Archivo:wght@400;500;600;700;800;900&family=Permanent+Marker&family=Caveat:wght@500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   
 
@@ -91,6 +91,53 @@
 }</script>
 </head>
 <body>
+<!-- ========== SVG DEFS: filters + doodle symbols ========== -->
+<svg class="svg-defs" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="rough-ink" x="-2%" y="-2%" width="104%" height="104%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.022 0.04" numOctaves="2" seed="3" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="2.2"/>
+    </filter>
+    <filter id="rough-ink-light" x="-2%" y="-2%" width="104%" height="104%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018 0.035" numOctaves="2" seed="5" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="1.6"/>
+    </filter>
+    <symbol id="d-plane" viewBox="0 0 60 40">
+      <path d="M2 20 L58 4 L34 22 L58 36 Z M34 22 L22 30" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="d-bolt" viewBox="0 0 40 60">
+      <path d="M22 2 L6 32 L18 32 L14 58 L34 24 L22 24 Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="d-spark" viewBox="0 0 70 70">
+      <g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <path d="M35 6 L35 26"/><path d="M35 44 L35 64"/>
+        <path d="M6 35 L26 35"/><path d="M44 35 L64 35"/>
+        <path d="M14 14 L26 26"/><path d="M44 44 L56 56"/>
+        <path d="M56 14 L44 26"/><path d="M26 44 L14 56"/>
+      </g>
+    </symbol>
+    <symbol id="d-star" viewBox="0 0 40 40">
+      <path d="M20 2 L24 16 L38 16 L27 24 L31 38 L20 30 L9 38 L13 24 L2 16 L16 16 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="d-droplet" viewBox="0 0 20 30">
+      <path d="M10 3 Q16 14 16 20 Q16 27 10 27 Q4 27 4 20 Q4 14 10 3 Z" fill="none" stroke="currentColor" stroke-width="2"/>
+    </symbol>
+    <symbol id="d-arrow" viewBox="0 0 80 40">
+      <path d="M4 20 Q24 4 44 24 T76 18 M66 10 L76 18 L70 28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="d-asterisk" viewBox="0 0 40 40">
+      <g stroke="currentColor" stroke-width="3" stroke-linecap="round">
+        <line x1="20" y1="4" x2="20" y2="36"/>
+        <line x1="6" y1="12" x2="34" y2="28"/>
+        <line x1="34" y1="12" x2="6" y2="28"/>
+      </g>
+    </symbol>
+    <symbol id="d-scribble" viewBox="0 0 80 30">
+      <path d="M4 24 Q12 4 22 18 T42 14 T62 20 T78 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
 
 <nav class="nav" id="mainNav" aria-label="Main navigation">
   <div class="nav-inner">
@@ -175,10 +222,10 @@
       <div>
         <span class="eyebrow">What to Expect</span>
         <ul style="list-style: none; padding: 0; margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
-          <li style="display: flex; gap: 0.75rem; align-items: center; padding: 0.875rem 1rem; background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: 6px;"><i data-lucide="check-circle" style="color: var(--accent); flex-shrink:0;"></i> Ages 4-6</li>
-          <li style="display: flex; gap: 0.75rem; align-items: center; padding: 0.875rem 1rem; background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: 6px;"><i data-lucide="check-circle" style="color: var(--accent); flex-shrink:0;"></i> Twice per week, 45 minutes</li>
-          <li style="display: flex; gap: 0.75rem; align-items: center; padding: 0.875rem 1rem; background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: 6px;"><i data-lucide="check-circle" style="color: var(--accent); flex-shrink:0;"></i> Character-first curriculum</li>
-          <li style="display: flex; gap: 0.75rem; align-items: center; padding: 0.875rem 1rem; background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: 6px;"><i data-lucide="check-circle" style="color: var(--accent); flex-shrink:0;"></i> Safe, fun environment</li>
+          <li class="trial-expect-list__li" style="display: flex; gap: 0.75rem; align-items: center; padding: 0.875rem 1rem; background: var(--paper-warm); border: 2.5px solid var(--ink); box-shadow: 3px 3px 0 var(--ink);"><i data-lucide="check-circle" style="color: var(--accent); flex-shrink:0;"></i> Ages 4-6</li>
+          <li class="trial-expect-list__li" style="display: flex; gap: 0.75rem; align-items: center; padding: 0.875rem 1rem; background: var(--paper-warm); border: 2.5px solid var(--ink); box-shadow: 3px 3px 0 var(--ink);"><i data-lucide="check-circle" style="color: var(--accent); flex-shrink:0;"></i> Twice per week, 45 minutes</li>
+          <li class="trial-expect-list__li" style="display: flex; gap: 0.75rem; align-items: center; padding: 0.875rem 1rem; background: var(--paper-warm); border: 2.5px solid var(--ink); box-shadow: 3px 3px 0 var(--ink);"><i data-lucide="check-circle" style="color: var(--accent); flex-shrink:0;"></i> Character-first curriculum</li>
+          <li class="trial-expect-list__li" style="display: flex; gap: 0.75rem; align-items: center; padding: 0.875rem 1rem; background: var(--paper-warm); border: 2.5px solid var(--ink); box-shadow: 3px 3px 0 var(--ink);"><i data-lucide="check-circle" style="color: var(--accent); flex-shrink:0;"></i> Safe, fun environment</li>
         </ul>
       </div>
     </div>

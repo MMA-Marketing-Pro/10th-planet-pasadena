@@ -9,6 +9,7 @@
     initNav();
     initScrollAnimations();
     initLeadModal();
+    initVideoModal();
     initBookingPage();
     initMarqueeClone();
     initCopyYear();
@@ -75,19 +76,19 @@
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
           if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
+            entry.target.classList.add('in');
             io.unobserve(entry.target);
           }
         });
       }, { rootMargin: '0px 0px -8% 0px' });
       els.forEach(function (el) { io.observe(el); });
     } else {
-      els.forEach(function (el) { el.classList.add('visible'); });
+      els.forEach(function (el) { el.classList.add('in'); });
     }
 
     // Safety: reveal everything still hidden after 3s (if user lingers offscreen)
     setTimeout(function () {
-      els.forEach(function (el) { el.classList.add('visible'); });
+      els.forEach(function (el) { el.classList.add('in'); });
     }, 3000);
   }
 
@@ -158,7 +159,7 @@
     var programSelect = modal.querySelector('#leadProgram');
 
     function openModal(presetProgram) {
-      modal.classList.add('active');
+      modal.classList.add('open');
       document.body.style.overflow = 'hidden';
       if (presetProgram && programSelect) {
         programSelect.value = presetProgram;
@@ -170,7 +171,7 @@
     }
 
     function closeModal() {
-      modal.classList.remove('active');
+      modal.classList.remove('open');
       document.body.style.overflow = '';
     }
 
@@ -185,7 +186,7 @@
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
     if (backdrop) backdrop.addEventListener('click', closeModal);
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+      if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
     });
 
     var phoneInput = modal.querySelector('#leadPhone');
@@ -222,6 +223,93 @@
         window.location.href = 'booking.html?program=' + encodeURIComponent(data.program);
       });
     }
+  }
+
+  /* ---------- Video Modal (inline YouTube player) ---------- */
+  function initVideoModal() {
+    var modal = document.getElementById('videoModal');
+    if (!modal) return;
+
+    var triggers = document.querySelectorAll('[data-video-id]');
+    if (!triggers.length) return;
+
+    var frame = modal.querySelector('#videoModalFrame');
+    var titleEl = modal.querySelector('#videoModalTitle');
+    var closeEls = modal.querySelectorAll('[data-video-close]');
+    var lastTrigger = null;
+
+    function clearFrame() {
+      while (frame.firstChild) frame.removeChild(frame.firstChild);
+    }
+
+    function appendLoader() {
+      var loader = document.createElement('div');
+      loader.className = 'video-modal__frame-loader';
+      loader.textContent = 'Loading video…';
+      frame.appendChild(loader);
+    }
+
+    function buildEmbed(id) {
+      // Use youtube.com/embed (not nocookie) and omit autoplay — "Made for kids"
+      // videos (required flag for kids-program content under COPPA) reject
+      // autoplay=1 with error 153 "player configuration error." User clicks
+      // play inside the iframe after the modal opens.
+      var src = 'https://www.youtube.com/embed/' + encodeURIComponent(id) +
+                '?rel=0&playsinline=1';
+      var iframe = document.createElement('iframe');
+      iframe.setAttribute('src', src);
+      iframe.setAttribute('title', titleEl.textContent || 'Video player');
+      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+      iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+      iframe.setAttribute('allowfullscreen', '');
+      iframe.setAttribute('loading', 'lazy');
+      return iframe;
+    }
+
+    function openModal(id, title, trigger) {
+      if (!id) return;
+      lastTrigger = trigger || null;
+      titleEl.textContent = title || 'Now Watching';
+      clearFrame();
+      appendLoader();
+      frame.appendChild(buildEmbed(id));
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      // Move focus into the modal for keyboard users
+      setTimeout(function () {
+        var closeBtn = modal.querySelector('.video-modal__close');
+        if (closeBtn) closeBtn.focus();
+      }, 40);
+    }
+
+    function closeModal() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      // Wipe the iframe so playback (and audio) fully stops.
+      clearFrame();
+      if (lastTrigger && typeof lastTrigger.focus === 'function') {
+        try { lastTrigger.focus(); } catch (e) { /* noop */ }
+      }
+    }
+
+    triggers.forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        var id = el.getAttribute('data-video-id');
+        if (!id) return; // fall back to default link behavior
+        e.preventDefault();
+        openModal(id, el.getAttribute('data-video-title') || '', el);
+      });
+    });
+
+    closeEls.forEach(function (el) {
+      el.addEventListener('click', closeModal);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+    });
   }
 
   /* ---------- Booking page — show correct calendar ---------- */
