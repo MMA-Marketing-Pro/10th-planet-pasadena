@@ -133,8 +133,17 @@
     });
 
     if (form){
+      var formReadyAt = Date.now();
       form.addEventListener('submit', function(e){
         e.preventDefault();
+        // Honeypot: bots fill the hidden "website" field; humans don't see it.
+        // Time-trap: real users can't fill the form in under 1.5s.
+        var hp = form.querySelector('input[name="website"]');
+        var elapsed = Date.now() - formReadyAt;
+        if ((hp && hp.value) || elapsed < 1500){
+          setState(false);
+          return;
+        }
         var fd = new FormData(form);
         var program = encodeURIComponent(fd.get('program') || '');
         var first   = encodeURIComponent(fd.get('first') || '');
