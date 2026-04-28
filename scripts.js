@@ -12,11 +12,67 @@
     initMobileMenu();
     initReveal();
     initLeadModal();
+    initInlineTrialForm();
     initBentoTilt();
     initBookingPage();
     initYearStamp();
     initBarsFill();
   });
+
+  /* Lead → GHL webhooks. Each program fires its webhooks in parallel before
+     the user is redirected to booking.html. Requests use keepalive so they
+     survive the navigation. */
+  var LEAD_WEBHOOKS = {
+    'no-gi-jiu-jitsu': [
+      'https://services.leadconnectorhq.com/hooks/ToDnK8jOevlOIUZVkwm1/webhook-trigger/1305112a-b9a9-4b5e-9ad7-0a4100fbb9ef',
+      'https://services.leadconnectorhq.com/hooks/ToDnK8jOevlOIUZVkwm1/webhook-trigger/fadbbbf8-d759-424d-942b-7c9347686c32'
+    ],
+    'nano-kids': [
+      'https://services.leadconnectorhq.com/hooks/ToDnK8jOevlOIUZVkwm1/webhook-trigger/59691ffd-f837-4b90-a3fa-d33fc7d09185',
+      'https://services.leadconnectorhq.com/hooks/ToDnK8jOevlOIUZVkwm1/webhook-trigger/14be997a-7ec3-41e2-96b0-c78bf2d892ef'
+    ],
+    'kids': [
+      'https://services.leadconnectorhq.com/hooks/ToDnK8jOevlOIUZVkwm1/webhook-trigger/a300b1eb-370a-47e7-8ba8-500aa54770ad',
+      'https://services.leadconnectorhq.com/hooks/ToDnK8jOevlOIUZVkwm1/webhook-trigger/cbd2a95d-1a50-4ca5-8787-6c235f9e5e6e'
+    ]
+  };
+
+  function fireLeadWebhooks(program, payload){
+    var urls = LEAD_WEBHOOKS[program] || [];
+    if (!urls.length || typeof fetch !== 'function') return;
+    var body = JSON.stringify(payload);
+    urls.forEach(function(url){
+      try {
+        fetch(url, {
+          method: 'POST',
+          mode: 'no-cors',
+          keepalive: true,
+          body: body
+        }).catch(function(){});
+      } catch(_) {}
+    });
+  }
+
+  function buildLeadPayload(fd){
+    return {
+      first_name: fd.get('first') || '',
+      last_name:  fd.get('last')  || '',
+      full_name:  ((fd.get('first') || '') + ' ' + (fd.get('last') || '')).trim(),
+      email:      fd.get('email') || '',
+      phone:      fd.get('phone') || '',
+      program:    fd.get('program') || '',
+      source:     'website-lead-form',
+      submitted_at: new Date().toISOString()
+    };
+  }
+
+  function buildBookingQuery(fd){
+    return 'program=' + encodeURIComponent(fd.get('program') || '') +
+           '&first='  + encodeURIComponent(fd.get('first')   || '') +
+           '&last='   + encodeURIComponent(fd.get('last')    || '') +
+           '&email='  + encodeURIComponent(fd.get('email')   || '') +
+           '&phone='  + encodeURIComponent(fd.get('phone')   || '');
+  }
 
   /* Navigation: shadow + blur after scroll */
   function initNav(){
@@ -145,19 +201,22 @@
           return;
         }
         var fd = new FormData(form);
-        var program = encodeURIComponent(fd.get('program') || '');
-        var first   = encodeURIComponent(fd.get('first') || '');
-        var last    = encodeURIComponent(fd.get('last') || '');
-        var email   = encodeURIComponent(fd.get('email') || '');
-        var phone   = encodeURIComponent(fd.get('phone') || '');
-        var q = 'program=' + program +
-                '&first='  + first +
-                '&last='   + last +
-                '&email='  + email +
-                '&phone='  + phone;
-        window.location.href = 'booking.html?' + q;
+        fireLeadWebhooks(fd.get('program') || '', buildLeadPayload(fd));
+        window.location.href = 'booking.html?' + buildBookingQuery(fd);
       });
     }
+  }
+
+  /* Inline trial form on free-trial.html — same funnel as the modal. */
+  function initInlineTrialForm(){
+    var ft = document.getElementById('main-trial-form');
+    if (!ft) return;
+    ft.addEventListener('submit', function(e){
+      e.preventDefault();
+      var fd = new FormData(ft);
+      fireLeadWebhooks(fd.get('program') || '', buildLeadPayload(fd));
+      window.location.href = 'booking.html?' + buildBookingQuery(fd);
+    });
   }
 
   /* Cursor-follow glow on bento tiles */
@@ -180,7 +239,7 @@
     if (!page) return;
 
     var params = new URLSearchParams(window.location.search);
-    var initial = params.get('program') || 'adult-fundamentals';
+    var initial = params.get('program') || 'no-gi-jiu-jitsu';
 
     var frames   = page.querySelectorAll('[data-program]');
     var switches = page.querySelectorAll('.program-switcher button');
@@ -188,12 +247,9 @@
 
     var nameFor = function(slug){
       var map = {
-        'adult-fundamentals': 'Adult Fundamentals',
-        'adult-all-levels':   'Adult All-Levels',
-        'nano-techs':         'Nano Techs (ages 4–6)',
-        'kids-jiu-jitsu':     'Kids Jiu-Jitsu (ages 6–12)',
-        'family-plan':        'Family Plan',
-        'kickstart-trial':    'Kickstart Trial'
+        'no-gi-jiu-jitsu': 'Adults No-Gi Jiu-Jitsu',
+        'nano-kids':       'Nano Kids (ages 4–6)',
+        'kids':            'Kids (ages 6–12)'
       };
       return map[slug] || 'Your Class';
     };
