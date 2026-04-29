@@ -33,8 +33,7 @@
       'https://services.leadconnectorhq.com/hooks/ToDnK8jOevlOIUZVkwm1/webhook-trigger/14be997a-7ec3-41e2-96b0-c78bf2d892ef'
     ],
     'kids': [
-      'https://services.leadconnectorhq.com/hooks/ToDnK8jOevlOIUZVkwm1/webhook-trigger/a300b1eb-370a-47e7-8ba8-500aa54770ad',
-      'https://services.leadconnectorhq.com/hooks/ToDnK8jOevlOIUZVkwm1/webhook-trigger/cbd2a95d-1a50-4ca5-8787-6c235f9e5e6e'
+      'https://services.leadconnectorhq.com/hooks/ToDnK8jOevlOIUZVkwm1/webhook-trigger/c38940d8-fbcc-4032-a9ca-ffbc65e37678'
     ]
   };
 
