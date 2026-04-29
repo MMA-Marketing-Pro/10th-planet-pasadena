@@ -25,7 +25,8 @@
      is unavailable or refuses the request. */
   var LEAD_WEBHOOKS = {
     'no-gi-jiu-jitsu': [
-      'https://services.leadconnectorhq.com/hooks/ToDnK8jOevlOIUZVkwm1/webhook-trigger/a7786918-45f0-48f2-a250-0396186bdf5d'
+      'https://services.leadconnectorhq.com/hooks/ToDnK8jOevlOIUZVkwm1/webhook-trigger/a7786918-45f0-48f2-a250-0396186bdf5d',
+      'https://services.leadconnectorhq.com/hooks/ToDnK8jOevlOIUZVkwm1/webhook-trigger/a84e8c88-8cec-41a6-aa7e-6d976ab777bb'
     ],
     'nano-kids': [
       'https://services.leadconnectorhq.com/hooks/ToDnK8jOevlOIUZVkwm1/webhook-trigger/59691ffd-f837-4b90-a3fa-d33fc7d09185',
