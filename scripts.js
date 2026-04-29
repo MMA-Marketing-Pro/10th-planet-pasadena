@@ -40,16 +40,26 @@
 
   function fireLeadWebhooks(program, payload){
     var urls = LEAD_WEBHOOKS[program] || [];
-    if (!urls.length) return;
+    console.log('[lead] fireLeadWebhooks called', { program: program, urlCount: urls.length, payload: payload });
+    if (!urls.length){
+      console.warn('[lead] No webhooks registered for program:', program);
+      return;
+    }
     var body = JSON.stringify(payload);
-    urls.forEach(function(url){
+    urls.forEach(function(url, i){
+      var label = '[lead] hook ' + (i + 1) + '/' + urls.length;
       var sent = false;
       try {
         if (navigator && typeof navigator.sendBeacon === 'function'){
           var blob = new Blob([body], { type: 'application/json' });
           sent = navigator.sendBeacon(url, blob);
+          console.log(label, 'sendBeacon →', sent ? 'queued' : 'rejected', url);
+        } else {
+          console.log(label, 'sendBeacon unavailable, trying fetch', url);
         }
-      } catch(_) {}
+      } catch(err){
+        console.warn(label, 'sendBeacon threw', err);
+      }
       if (!sent && typeof fetch === 'function'){
         try {
           fetch(url, {
@@ -57,8 +67,14 @@
             headers: { 'Content-Type': 'application/json' },
             keepalive: true,
             body: body
-          }).catch(function(){});
-        } catch(_) {}
+          }).then(function(r){
+            console.log(label, 'fetch resolved', r.status, url);
+          }).catch(function(err){
+            console.warn(label, 'fetch rejected', err, url);
+          });
+        } catch(err){
+          console.warn(label, 'fetch threw', err);
+        }
       }
     });
   }
@@ -209,11 +225,13 @@
       var formReadyAt = Date.now();
       form.addEventListener('submit', function(e){
         e.preventDefault();
+        console.log('[lead] modal submit fired');
         // Honeypot: bots fill the hidden "website" field; humans don't see it.
         // Time-trap: real users can't fill the form in under 1.5s.
         var hp = form.querySelector('input[name="website"]');
         var elapsed = Date.now() - formReadyAt;
         if ((hp && hp.value) || elapsed < 1500){
+          console.warn('[lead] modal submit BLOCKED by anti-bot — honeypot:', !!(hp && hp.value), 'elapsed:', elapsed + 'ms');
           setState(false);
           return;
         }
@@ -230,6 +248,7 @@
     if (!ft) return;
     ft.addEventListener('submit', function(e){
       e.preventDefault();
+      console.log('[lead] inline submit fired');
       var fd = new FormData(ft);
       fireLeadWebhooks(fd.get('program') || '', buildLeadPayload(fd));
       navigateAfterWebhooks('booking.html?' + buildBookingQuery(fd));
