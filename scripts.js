@@ -19,9 +19,10 @@
     initBarsFill();
   });
 
-  /* Lead → GHL webhooks. Each program fires its webhooks in parallel before
-     the user is redirected to booking.html. Requests use keepalive so they
-     survive the navigation. */
+  /* Lead → GHL webhooks. Each program fires its webhooks in parallel via
+     navigator.sendBeacon, which is purpose-built for fire-and-forget POSTs
+     during page navigation. Falls back to fetch + keepalive if sendBeacon
+     is unavailable or refuses the request. */
   var LEAD_WEBHOOKS = {
     'no-gi-jiu-jitsu': [
       'https://services.leadconnectorhq.com/hooks/ToDnK8jOevlOIUZVkwm1/webhook-trigger/1305112a-b9a9-4b5e-9ad7-0a4100fbb9ef',
@@ -39,18 +40,34 @@
 
   function fireLeadWebhooks(program, payload){
     var urls = LEAD_WEBHOOKS[program] || [];
-    if (!urls.length || typeof fetch !== 'function') return;
+    if (!urls.length) return;
     var body = JSON.stringify(payload);
     urls.forEach(function(url){
+      var sent = false;
       try {
-        fetch(url, {
-          method: 'POST',
-          mode: 'no-cors',
-          keepalive: true,
-          body: body
-        }).catch(function(){});
+        if (navigator && typeof navigator.sendBeacon === 'function'){
+          var blob = new Blob([body], { type: 'application/json' });
+          sent = navigator.sendBeacon(url, blob);
+        }
       } catch(_) {}
+      if (!sent && typeof fetch === 'function'){
+        try {
+          fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            keepalive: true,
+            body: body
+          }).catch(function(){});
+        } catch(_) {}
+      }
     });
+  }
+
+  function navigateAfterWebhooks(href){
+    // Yield one tick so beacon/fetch are flushed by the browser before
+    // the navigation kicks in. setTimeout(0) puts us at the back of the
+    // task queue, which is enough for the network layer to dispatch.
+    setTimeout(function(){ window.location.href = href; }, 0);
   }
 
   function buildLeadPayload(fd){
@@ -202,7 +219,7 @@
         }
         var fd = new FormData(form);
         fireLeadWebhooks(fd.get('program') || '', buildLeadPayload(fd));
-        window.location.href = 'booking.html?' + buildBookingQuery(fd);
+        navigateAfterWebhooks('booking.html?' + buildBookingQuery(fd));
       });
     }
   }
@@ -215,7 +232,7 @@
       e.preventDefault();
       var fd = new FormData(ft);
       fireLeadWebhooks(fd.get('program') || '', buildLeadPayload(fd));
-      window.location.href = 'booking.html?' + buildBookingQuery(fd);
+      navigateAfterWebhooks('booking.html?' + buildBookingQuery(fd));
     });
   }
 
