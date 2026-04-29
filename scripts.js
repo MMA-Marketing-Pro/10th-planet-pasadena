@@ -19,10 +19,14 @@
     initBarsFill();
   });
 
-  /* Lead → GHL webhooks. Each program fires its webhooks in parallel via
-     navigator.sendBeacon, which is purpose-built for fire-and-forget POSTs
-     during page navigation. Falls back to fetch + keepalive if sendBeacon
-     is unavailable or refuses the request. */
+  /* Lead → GHL webhooks. Each program POSTs JSON in parallel via fetch with
+     keepalive:true, then waits for the network requests to settle before
+     navigating to booking.html. We previously used navigator.sendBeacon, but
+     sendBeacon with an application/json Blob requires a CORS preflight that
+     can be canceled when the page unloads before the OPTIONS round-trip
+     completes — by the time the preflight finished, navigation had already
+     killed the queued POST. Awaiting the fetch (with a 2s safety cap) keeps
+     the request alive long enough for GHL to acknowledge it. */
   var LEAD_WEBHOOKS = {
     'no-gi-jiu-jitsu': [
       'https://services.leadconnectorhq.com/hooks/ToDnK8jOevlOIUZVkwm1/webhook-trigger/a7786918-45f0-48f2-a250-0396186bdf5d',
@@ -43,47 +47,55 @@
     console.log('[lead] fireLeadWebhooks called', { program: program, urlCount: urls.length, payload: payload });
     if (!urls.length){
       console.warn('[lead] No webhooks registered for program:', program);
-      return;
+      return Promise.resolve();
     }
     var body = JSON.stringify(payload);
-    urls.forEach(function(url, i){
+    var promises = urls.map(function(url, i){
       var label = '[lead] hook ' + (i + 1) + '/' + urls.length;
-      var sent = false;
-      try {
-        if (navigator && typeof navigator.sendBeacon === 'function'){
-          var blob = new Blob([body], { type: 'application/json' });
-          sent = navigator.sendBeacon(url, blob);
-          console.log(label, 'sendBeacon →', sent ? 'queued' : 'rejected', url);
-        } else {
-          console.log(label, 'sendBeacon unavailable, trying fetch', url);
-        }
-      } catch(err){
-        console.warn(label, 'sendBeacon threw', err);
-      }
-      if (!sent && typeof fetch === 'function'){
+      if (typeof fetch !== 'function'){
+        // Last-resort fallback for ancient browsers without fetch.
         try {
-          fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            keepalive: true,
-            body: body
-          }).then(function(r){
-            console.log(label, 'fetch resolved', r.status, url);
-          }).catch(function(err){
-            console.warn(label, 'fetch rejected', err, url);
-          });
+          var blob = new Blob([body], { type: 'application/json' });
+          var sent = navigator.sendBeacon(url, blob);
+          console.log(label, 'sendBeacon (no-fetch fallback) →', sent ? 'queued' : 'rejected', url);
         } catch(err){
-          console.warn(label, 'fetch threw', err);
+          console.warn(label, 'sendBeacon threw', err);
         }
+        return Promise.resolve();
+      }
+      try {
+        return fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          keepalive: true,
+          body: body
+        }).then(function(r){
+          // Read the body — GHL returns 200 even on payload errors, with
+          // the real status in a JSON field. Without this we'd never see
+          // a server-side rejection.
+          return r.text().then(function(t){
+            console.log(label, 'fetch resolved', r.status, t, url);
+          });
+        }).catch(function(err){
+          console.warn(label, 'fetch rejected', err, url);
+        });
+      } catch(err){
+        console.warn(label, 'fetch threw', err);
+        return Promise.resolve();
       }
     });
+    return Promise.all(promises);
   }
 
-  function navigateAfterWebhooks(href){
-    // Yield one tick so beacon/fetch are flushed by the browser before
-    // the navigation kicks in. setTimeout(0) puts us at the back of the
-    // task queue, which is enough for the network layer to dispatch.
-    setTimeout(function(){ window.location.href = href; }, 0);
+  function navigateAfterWebhooks(href, fireResult){
+    // Wait for the webhook POSTs to land before navigating, otherwise the
+    // unload cancels in-flight CORS preflights. Cap the wait at 2 seconds
+    // so a slow GHL response doesn't strand the user on the form page.
+    var safety = new Promise(function(resolve){ setTimeout(resolve, 2000); });
+    var done = fireResult && typeof fireResult.then === 'function' ? fireResult : Promise.resolve();
+    Promise.race([done, safety]).then(function(){
+      window.location.href = href;
+    });
   }
 
   function buildLeadPayload(fd){
@@ -236,8 +248,8 @@
           return;
         }
         var fd = new FormData(form);
-        fireLeadWebhooks(fd.get('program') || '', buildLeadPayload(fd));
-        navigateAfterWebhooks('booking.html?' + buildBookingQuery(fd));
+        var fireResult = fireLeadWebhooks(fd.get('program') || '', buildLeadPayload(fd));
+        navigateAfterWebhooks('booking.html?' + buildBookingQuery(fd), fireResult);
       });
     }
   }
@@ -250,8 +262,8 @@
       e.preventDefault();
       console.log('[lead] inline submit fired');
       var fd = new FormData(ft);
-      fireLeadWebhooks(fd.get('program') || '', buildLeadPayload(fd));
-      navigateAfterWebhooks('booking.html?' + buildBookingQuery(fd));
+      var fireResult = fireLeadWebhooks(fd.get('program') || '', buildLeadPayload(fd));
+      navigateAfterWebhooks('booking.html?' + buildBookingQuery(fd), fireResult);
     });
   }
 
