@@ -29,8 +29,7 @@
       'https://services.leadconnectorhq.com/hooks/ToDnK8jOevlOIUZVkwm1/webhook-trigger/a84e8c88-8cec-41a6-aa7e-6d976ab777bb'
     ],
     'nano-kids': [
-      'https://services.leadconnectorhq.com/hooks/ToDnK8jOevlOIUZVkwm1/webhook-trigger/59691ffd-f837-4b90-a3fa-d33fc7d09185',
-      'https://services.leadconnectorhq.com/hooks/ToDnK8jOevlOIUZVkwm1/webhook-trigger/14be997a-7ec3-41e2-96b0-c78bf2d892ef'
+      'https://services.leadconnectorhq.com/hooks/ToDnK8jOevlOIUZVkwm1/webhook-trigger/2790b1eb-0ff0-4de1-b528-0c23507a96b4'
     ],
     'kids': [
       'https://services.leadconnectorhq.com/hooks/ToDnK8jOevlOIUZVkwm1/webhook-trigger/c38940d8-fbcc-4032-a9ca-ffbc65e37678',
