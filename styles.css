@@ -1072,8 +1072,11 @@ section{ position:relative; z-index:1; }
     color:var(--paper-3); letter-spacing:0.14em; text-transform:uppercase;
   }
 }
+@media (max-width: 899px){
+  .sched-grid--cells{ display:none !important; }
+}
 @media (min-width: 900px){
-  .sched-day, .sched-day-hd, .sched-day-row{ display:none !important; }
+  .sched-grid--days{ display:none !important; }
 }
 
 /* ---- Testimonials --------------------------------------------- */
