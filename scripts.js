@@ -17,6 +17,7 @@
     initBookingPage();
     initYearStamp();
     initBarsFill();
+    initBioToggle();
   });
 
   /* Lead → GHL webhooks. Each program POSTs JSON in parallel via fetch with
@@ -331,6 +332,25 @@
     var year = new Date().getFullYear();
     document.querySelectorAll('[data-year]').forEach(function(el){
       el.textContent = String(year);
+    });
+  }
+
+  /* Instructor bio expand/collapse */
+  function initBioToggle(){
+    var toggles = document.querySelectorAll('.bio-toggle');
+    if (!toggles.length) return;
+    toggles.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var id = btn.getAttribute('aria-controls');
+        var bio = id ? document.getElementById(id) : null;
+        if (!bio) return;
+        var open = btn.getAttribute('aria-expanded') === 'true';
+        var next = !open;
+        btn.setAttribute('aria-expanded', String(next));
+        bio.hidden = !next;
+        var label = btn.querySelector('.bio-toggle-label');
+        if (label) label.textContent = next ? 'Hide bio' : 'Read bio';
+      });
     });
   }
 

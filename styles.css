@@ -980,6 +980,40 @@ section{ position:relative; z-index:1; }
 .coach .rank .dot{
   width:8px; height:8px; border-radius:999px; background:var(--sig);
 }
+.coach .bio-toggle{
+  margin-top:6px;
+  align-self:flex-start;
+  display:inline-flex; align-items:center; gap:10px;
+  padding:10px 14px;
+  background:var(--ink-3);
+  border:1px solid var(--line-2);
+  border-radius:999px;
+  color:var(--paper);
+  font-family:var(--f-mono);
+  font-size:11px; font-weight:600;
+  letter-spacing:0.14em; text-transform:uppercase;
+  cursor:pointer;
+  transition: border-color .2s, background .2s, color .2s;
+}
+.coach .bio-toggle:hover{
+  border-color:var(--sig);
+  color:var(--sig);
+  background:var(--ink-4);
+}
+.coach .bio-toggle-icon{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:14px; height:14px;
+  font-family:var(--f-mono); font-size:14px; line-height:1;
+  transition: transform .25s var(--ease-spring);
+}
+.coach .bio-toggle[aria-expanded="true"] .bio-toggle-icon{ transform: rotate(45deg); }
+.coach .bio{
+  margin:6px 0 0;
+  padding-top:14px;
+  border-top:1px solid var(--line);
+  color:var(--paper-2);
+  font-size:14px; line-height:1.65;
+}
 
 /* ---- Schedule block ------------------------------------------ */
 .sched{
